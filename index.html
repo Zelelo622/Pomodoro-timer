@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Pomodoro Timer</title>
+    <link rel="stylesheet" type="text/css" href="./css/reset.css" />
+    <link rel="stylesheet" type="text/css" href="./css/style.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="container">
+        <div class="header__inner">
+          <nav class="nav">
+            <ul class="nav__list">
+              <li class="nav__item">
+                <button class="nav__btn">Описание</button>
+              </li>
+              <li class="nav__item">
+                <button class="nav__btn">Настройки</button>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="main">
+      <section class="timer">
+        <div class="container">
+          <div class="timer__inner">
+            <ul class="timer__list">
+              <li class="timer__item">
+                <button class="timer__btn">Pomodoro</button>
+              </li>
+              <li class="timer__item">
+                <button class="timer__btn">Short Break</button>
+              </li>
+              <li class="timer__item">
+                <button class="timer__btn">Long Break</button>
+              </li>
+            </ul>
+
+            <div class="timer__display">
+              <div class="timer__time">
+                <h2 id="minutes">25</h2>
+              </div>
+              <div class="timer__time">
+                <h2 id="separator">:</h2>
+              </div>
+              <div class="timer__time">
+                <h2 id="seconds">00</h2>
+              </div>
+            </div>
+            <div class="timer__func">
+              <button class="timer__btn-setting">START</button>
+              <button class="timer__btn-setting">PAUSE</button>
+              <button class="timer__btn-setting">RESET</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="./js/script.js"></script>
+  </body>
+</html>
