@@ -67,17 +67,102 @@
       <div class="modal__container">
         <div class="modal__content">
           <div class="modal__header">
-            <span class="close">&times;</span>
+            <span id="closeDescription" class="close">&times;</span>
             <h2>Описание</h2>
           </div>
           <div class="modal__body">
-            <p class="modal__parag">
-              Возможности:
-            </p>
+            <p class="modal__parag">Возможности:</p>
             <ul class="modal__list">
-              <li class="modal__item">Возможность переключаться между тайменами</li>
-              <li class="modal__item">Возможность приостанавливать и сбрасывать таймер</li>
+              <li class="modal__item">
+                Возможность переключаться между тайменами
+              </li>
+              <li class="modal__item">
+                Возможность приостанавливать и сбрасывать таймер
+              </li>
+              <li class="modal__item">
+                Возможность настройки времени для всех таймеров
+              </li>
+              <li class="modal__item">
+                Возможность настройки интервала длинного перерыва 
+              </li>
             </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal content for settings -->
+    <div id="modalSettings" class="modal">
+      <div class="modal__container">
+        <div class="modal__content">
+          <div class="modal__header">
+            <h2>Настройки</h2>
+          </div>
+          <div class="modal__body">
+            <div class="modal__title">TIMER</div>
+            <div class="modal__timer">
+              <div class="modal__subtitle"><span>Время (минуты)</span></div>
+              <div class="modal__inputs">
+                <div class="modal__block-input">
+                  <label for="pomodoroInput" class="modal__label"
+                    >Pomodoro</label
+                  >
+                  <input
+                    id="pomodoroInput"
+                    type="number"
+                    min="1"
+                    class="modal__input"
+                    value="25"
+                  />
+                </div>
+                <div class="modal__block-input">
+                  <label for="shortBreakInput" class="modal__label"
+                    >Short break</label
+                  >
+                  <input
+                    id="shortBreakInput"
+                    type="number"
+                    min="1"
+                    class="modal__input"
+                    value="5"
+                  />
+                </div>
+                <div class="modal__block-input">
+                  <label for="longBreakInput" class="modal__label"
+                    >Long break</label
+                  >
+                  <input
+                    id="longBreakInput"
+                    type="number"
+                    min="1"
+                    class="modal__input"
+                    value="15"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="modal__timer">
+              <div class="modal__string">
+                <div class="modal__subtitle-mb0 modal__subtitle">
+                  <span>Интервал длинного перерыва</span>
+                </div>
+                <div>
+                  <input
+                    id="intervalInput"
+                    type="number"
+                    min="1"
+                    class="modal__input"
+                    value="4"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal__footer">
+            <button id="resetOriginalButton" class="modal__reset">
+              Сбросить настройки
+            </button>
+            <button id="okButton" class="modal__successfully">ОК</button>
           </div>
         </div>
       </div>

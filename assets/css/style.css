@@ -119,8 +119,15 @@ button:hover {
   margin: 0 auto;
 }
 
-.modal {
+#modalDescription {
   display: none;
+}
+
+#modalSettings {
+  display: none;
+}
+
+.modal {
   position: fixed;
   z-index: 1;
   padding-top: 100px;
@@ -193,7 +200,29 @@ button:hover {
 }
 
 .modal__body {
-  padding: 2px 16px;
+  padding: 2px 16px 20px 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  margin-bottom: 20px;
+}
+
+.modal__footer {
+  text-align: end;
+  padding: 0 16px 20px 16px;
+}
+
+.modal__reset {
+  background-color: #5c97db;
+}
+
+.modal__successfully {
+  margin-left: 10px;
+  background-color: #4fbe38;
+}
+
+.modal__successfully.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+  cursor: default;
 }
 
 .modal__parag {
@@ -211,4 +240,52 @@ button:hover {
   display: inline-block;
   width: 10px;
   margin-left: 20px;
+}
+
+.modal__title {
+  font-weight: 400;
+  font-size: 20px;
+  opacity: 0.4;
+  margin-bottom: 10px;
+}
+
+.modal__timer {
+  margin-bottom: 20px;
+}
+
+.modal__subtitle {
+  font-weight: 500;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.modal__inputs {
+  display: flex;
+  justify-content: space-between;
+}
+
+.modal__block-input {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+.modal__lable {
+  margin-bottom: 5px;
+}
+
+.modal__input {
+  padding: 8px;
+  width: 98px;
+  border-radius: 10px;
+}
+
+.modal__string {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal__subtitle-mb0 {
+  margin-bottom: 0;
 }
