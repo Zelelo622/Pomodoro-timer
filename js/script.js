@@ -9,10 +9,17 @@ const resetBtn = document.querySelector("#btn-reset");
 const minutesDisplay = document.querySelector("#minutes");
 const secondsDisplay = document.querySelector("#seconds");
 
+const modalDescription = document.querySelector("#modalDescription");
+const closeModal = document.querySelector(".close");
+const btnDescription = document.querySelector("#btnDescription");
+const btnSettings = document.querySelector("#btnSettings");
+
 let timerInterval;
 let timeRemaining = 0;
 let activeTimer;
 let pomodoroCount = 0;
+
+// Pomodoro timer
 
 function startTimer(duration) {
   let timer = duration * 60;
@@ -132,3 +139,19 @@ startBtn.addEventListener("click", handleStart);
 pauseBtn.addEventListener("click", handleButtonStart);
 
 resetBtn.addEventListener("click", handleButtonReset);
+
+// Modal windows
+
+btnDescription.addEventListener("click", function () {
+  modalDescription.style.display = "block";
+});
+
+closeModal.addEventListener("click", function () {
+  modalDescription.style.display = "none";
+});
+
+window.addEventListener("click", function (e) {
+  if (e.target == modalDescription) {
+    modalDescription.style.display = "none";
+  }
+});

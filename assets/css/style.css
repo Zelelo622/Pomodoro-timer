@@ -6,7 +6,7 @@
 
 body {
   font-family: "Montserrat", sans-serif;
-  font-weight: 700;
+  font-weight: 400;
   font-size: 18px;
   line-height: 24px;
   color: #000;
@@ -86,13 +86,13 @@ button:hover {
 /*  */
 
 .timer__display {
+  font-weight: 700;
   display: flex;
   margin-bottom: 50px;
   font-size: 70px;
 }
 
 .timer__time {
-
 }
 
 .timer__func {
@@ -101,7 +101,6 @@ button:hover {
 }
 
 .timer__btn-start {
-
 }
 
 .timer__btn-pause {
@@ -110,4 +109,106 @@ button:hover {
 
 .timer__btn-reset {
   display: none;
+}
+
+/*  */
+
+.modal__container {
+  max-width: 620px;
+  padding: 0 40px;
+  margin: 0 auto;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  padding-top: 100px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal__content {
+  position: relative;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  border: 1px solid #888;
+  width: 100%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  -webkit-animation-name: animatetop;
+  -webkit-animation-duration: 0.4s;
+  animation-name: animatetop;
+  animation-duration: 0.4s;
+}
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+  from {
+    top: -300px;
+    opacity: 0;
+  }
+  to {
+    top: 0;
+    opacity: 1;
+  }
+}
+
+@keyframes animatetop {
+  from {
+    top: -300px;
+    opacity: 0;
+  }
+  to {
+    top: 0;
+    opacity: 1;
+  }
+}
+
+.close {
+  color: #000;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.close:hover {
+  opacity: 0.3;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal__header {
+  font-size: 28px;
+  background-color: #fff;
+  padding: 16px;
+  margin-bottom: 5px;
+  color: #000;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.modal__body {
+  padding: 2px 16px;
+}
+
+.modal__parag {
+  font-weight: 500;
+  font-size: 20px;
+}
+
+.modal__list {
+  font-weight: 300;
+  font-size: 16px;
+}
+
+.modal__item::before {
+  content: "•";
+  display: inline-block;
+  width: 10px;
+  margin-left: 20px;
 }

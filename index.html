@@ -12,10 +12,10 @@
           <nav class="nav">
             <ul class="nav__list">
               <li class="nav__item">
-                <button id="btn-description" class="nav__btn">Описание</button>
+                <button id="btnDescription" class="nav__btn">Описание</button>
               </li>
               <li class="nav__item">
-                <button id="btn-settings" class="nav__btn">Настройки</button>
+                <button id="btnSettings" class="nav__btn">Настройки</button>
               </li>
             </ul>
           </nav>
@@ -32,7 +32,9 @@
                 <button id="pomodoroBtn" class="timer__btn">Pomodoro</button>
               </li>
               <li class="timer__item">
-                <button id="shortBreakBtn" class="timer__btn">Short Break</button>
+                <button id="shortBreakBtn" class="timer__btn">
+                  Short Break
+                </button>
               </li>
               <li class="timer__item">
                 <button id="longBreakBtn" class="timer__btn">Long Break</button>
@@ -51,7 +53,7 @@
               </div>
             </div>
             <div class="timer__func">
-              <button  id="btn-start" class="timer__btn-start">START</button>
+              <button id="btn-start" class="timer__btn-start">START</button>
               <button id="btn-pause" class="timer__btn-pause">PAUSE</button>
               <button id="btn-reset" class="timer__btn-reset">RESET</button>
             </div>
@@ -59,6 +61,27 @@
         </div>
       </section>
     </main>
+
+    <!-- Modal content for description -->
+    <div id="modalDescription" class="modal">
+      <div class="modal__container">
+        <div class="modal__content">
+          <div class="modal__header">
+            <span class="close">&times;</span>
+            <h2>Описание</h2>
+          </div>
+          <div class="modal__body">
+            <p class="modal__parag">
+              Возможности:
+            </p>
+            <ul class="modal__list">
+              <li class="modal__item">Возможность переключаться между тайменами</li>
+              <li class="modal__item">Возможность приостанавливать и сбрасывать таймер</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <script src="./js/script.js"></script>
   </body>
