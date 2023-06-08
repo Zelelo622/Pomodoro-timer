@@ -2,8 +2,8 @@
 <html>
   <head>
     <title>Pomodoro Timer</title>
-    <link rel="stylesheet" type="text/css" href="./css/reset.css" />
-    <link rel="stylesheet" type="text/css" href="./css/style.css" />
+    <link rel="stylesheet" href="./assets/css/reset.css" />
+    <link rel="stylesheet" href="./assets/css/style.css" />
   </head>
   <body>
     <header class="header">
@@ -12,10 +12,10 @@
           <nav class="nav">
             <ul class="nav__list">
               <li class="nav__item">
-                <button class="nav__btn">Описание</button>
+                <button id="btn-description" class="nav__btn">Описание</button>
               </li>
               <li class="nav__item">
-                <button class="nav__btn">Настройки</button>
+                <button id="btn-settings" class="nav__btn">Настройки</button>
               </li>
             </ul>
           </nav>
@@ -29,13 +29,13 @@
           <div class="timer__inner">
             <ul class="timer__list">
               <li class="timer__item">
-                <button class="timer__btn">Pomodoro</button>
+                <button id="pomodoroBtn" class="timer__btn">Pomodoro</button>
               </li>
               <li class="timer__item">
-                <button class="timer__btn">Short Break</button>
+                <button id="shortBreakBtn" class="timer__btn">Short Break</button>
               </li>
               <li class="timer__item">
-                <button class="timer__btn">Long Break</button>
+                <button id="longBreakBtn" class="timer__btn">Long Break</button>
               </li>
             </ul>
 
@@ -51,9 +51,9 @@
               </div>
             </div>
             <div class="timer__func">
-              <button class="timer__btn-setting">START</button>
-              <button class="timer__btn-setting">PAUSE</button>
-              <button class="timer__btn-setting">RESET</button>
+              <button  id="btn-start" class="timer__btn-start">START</button>
+              <button id="btn-pause" class="timer__btn-pause">PAUSE</button>
+              <button id="btn-reset" class="timer__btn-reset">RESET</button>
             </div>
           </div>
         </div>

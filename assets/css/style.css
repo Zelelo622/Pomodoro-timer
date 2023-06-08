@@ -92,10 +92,22 @@ button:hover {
 }
 
 .timer__time {
+
 }
 
 .timer__func {
+  display: flex;
+  gap: 10px;
 }
 
-.timer__btn-setting {
+.timer__btn-start {
+
+}
+
+.timer__btn-pause {
+  display: none;
+}
+
+.timer__btn-reset {
+  display: none;
 }
