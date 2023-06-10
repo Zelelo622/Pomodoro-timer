@@ -262,20 +262,7 @@ const taskInput = document.querySelector("#taskInput");
 const todoList = document.querySelector("#todoList");
 const addTaskButton = document.querySelector("#addTaskButton");
 const removeTask = document.querySelector("#removeTask");
-
-taskInput.addEventListener("keypress", function (event) {
-  if (event.key === "Enter") {
-    addTask(taskInput.value);
-    taskInput.value = "";
-  }
-});
-
-addTaskButton.addEventListener("click", function () {
-  if (taskInput.value.trim() !== "") {
-    addTask(taskInput.value);
-    taskInput.value = "";
-  }
-});
+const pomodoroCountTask = document.querySelector("#pomodoroCountTask");
 
 document.addEventListener("DOMContentLoaded", function () {
   const savedTasks = localStorage.getItem("tasks");
@@ -293,6 +280,8 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   }
+
+  checkTaskInputs();
 });
 
 function saveTasksToLocalStorage() {
@@ -306,6 +295,38 @@ function saveTasksToLocalStorage() {
 
   localStorage.setItem("tasks", JSON.stringify(taskData));
 }
+
+function checkTaskInputs() {
+  const pomodoroCountTaskValue = parseInt(pomodoroCountTask.value);
+
+  const hasEmptyInput = isNaN(pomodoroCountTaskValue);
+  const hasNegativeInput = pomodoroCountTaskValue < 0;
+
+  const isTextEmpty = taskInput.value.trim() === "";
+
+  addTaskButton.disabled = hasEmptyInput || hasNegativeInput || isTextEmpty;
+
+  if (addTaskButton.disabled) {
+    addTaskButton.classList.add("disabled");
+  } else {
+    addTaskButton.classList.remove("disabled");
+  }
+}
+
+pomodoroCountTask.addEventListener("input", checkTaskInputs);
+taskInput.addEventListener("input", checkTaskInputs);
+
+taskInput.addEventListener("keypress", function (event) {
+  if (event.key === "Enter" && !addTaskButton.disabled) {
+    addTask(taskInput.value);
+    taskInput.value = "";
+  }
+});
+
+addTaskButton.addEventListener("click", function () {
+  addTask(taskInput.value);
+  taskInput.value = "";
+});
 
 let taskIdCounter = 0;
 function addTask(taskText) {

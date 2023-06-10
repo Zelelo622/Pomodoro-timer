@@ -53,9 +53,9 @@
               </div>
             </div>
             <div class="timer__func">
-              <button id="btn-start" class="timer__btn-start">START</button>
-              <button id="btn-pause" class="timer__btn-pause">PAUSE</button>
-              <button id="btn-reset" class="timer__btn-reset">RESET</button>
+              <button id="btn-start" class="timer__btn-start">СТАРТ</button>
+              <button id="btn-pause" class="timer__btn-pause">ПАУЗА</button>
+              <button id="btn-reset" class="timer__btn-reset">СБРОС</button>
             </div>
           </div>
         </div>
@@ -180,7 +180,10 @@
               class="todo__input"
               placeholder="Введите задачу..."
             />
-            <button id="addTaskButton" class="todo__button">Добавить</button>
+            <div class="todo__pomodoro-container">
+              <input id="pomodoroCountTask" type="number" class="todo__input-num todo__input" value="1" min="0">
+              <button id="addTaskButton" class="todo__button">Добавить</button>
+            </div>
           </div>
           <ul id="todoList" class="todo__list"></ul>
         </div>
