@@ -255,3 +255,113 @@ resetOriginalButton.addEventListener("click", function () {
   longBreakInput.value = 15;
   intervalInput.value = 4;
 });
+
+// ToDo List
+
+const taskInput = document.querySelector("#taskInput");
+const todoList = document.querySelector("#todoList");
+const addTaskButton = document.querySelector("#addTaskButton");
+const removeTask = document.querySelector("#removeTask");
+
+taskInput.addEventListener("keypress", function (event) {
+  if (event.key === "Enter") {
+    addTask(taskInput.value);
+    taskInput.value = "";
+  }
+});
+
+addTaskButton.addEventListener("click", function () {
+  if (taskInput.value.trim() !== "") {
+    addTask(taskInput.value);
+    taskInput.value = "";
+  }
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  const savedTasks = localStorage.getItem("tasks");
+  if (savedTasks) {
+    const taskData = JSON.parse(savedTasks);
+    taskData.forEach((task) => {
+      addTask(task.text);
+      const taskItem = document.getElementById(task.id);
+      const checkbox = document.getElementById(`taskCheckbox_${task.id}`);
+      const todoItem = document.getElementById(`todoItem_${task.id}`);
+      if (task.completed) {
+        taskItem.classList.add("completed");
+        checkbox.checked = true;
+        todoItem.classList.add("completed");
+      }
+    });
+  }
+});
+
+function saveTasksToLocalStorage() {
+  const tasks = Array.from(document.querySelectorAll(".todo__item"));
+
+  const taskData = tasks.map((task) => ({
+    id: task.id,
+    text: task.querySelector(".todo__input").value,
+    completed: task.classList.contains("completed"),
+  }));
+
+  localStorage.setItem("tasks", JSON.stringify(taskData));
+}
+
+let taskIdCounter = 0;
+function addTask(taskText) {
+  const taskId = `task_${taskIdCounter++}`;
+
+  const taskItem = `
+      <li id="todoItem_${taskId}" class="todo__item">
+          <div class="todo__item-container">
+            <input id="taskCheckbox_${taskId}" type="checkbox" class="todo__checkbox">
+            <input id="${taskId}" type="text" class="todo__input-read todo__input" value="${taskText}" readonly>
+          </div>
+          <span id="removeTask" class="close">&times;</span>
+      </li>
+  `;
+  todoList.insertAdjacentHTML("beforeend", taskItem);
+
+  const taskLabel = document.querySelector(`#${taskId}`);
+  const checkbox = document.querySelector(`#taskCheckbox_${taskId}`);
+  const todoItem = document.querySelector(`#todoItem_${taskId}`);
+
+  checkbox.addEventListener("change", function () {
+    if (this.checked) {
+      taskLabel.classList.add("completed");
+      todoItem.classList.add("completed");
+    } else {
+      taskLabel.classList.remove("completed");
+      todoItem.classList.remove("completed");
+    }
+
+    saveTasksToLocalStorage();
+  });
+
+  taskLabel.addEventListener("click", function () {
+    this.removeAttribute("readonly");
+    this.focus();
+  });
+
+  taskLabel.addEventListener("blur", function () {
+    this.setAttribute("readonly", true);
+    saveTasksToLocalStorage();
+  });
+
+  taskLabel.addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+      this.setAttribute("readonly", true);
+      saveTasksToLocalStorage();
+    }
+  });
+
+  saveTasksToLocalStorage();
+}
+
+todoList.addEventListener("click", function (event) {
+  if (event.target.id === "removeTask") {
+    const taskItem = event.target.parentNode;
+    taskItem.remove();
+    saveTasksToLocalStorage();
+  }
+});

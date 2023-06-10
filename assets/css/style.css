@@ -58,6 +58,7 @@ button:hover {
 
 .timer {
   margin: auto;
+  margin-bottom: 50px;
 }
 
 .timer__inner {
@@ -288,4 +289,75 @@ button:hover {
 
 .modal__subtitle-mb0 {
   margin-bottom: 0;
+}
+
+/*  */
+
+.todo {
+}
+
+.todo__inner {
+  display: flex;
+  flex-direction: column;
+}
+
+.todo__title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.todo__input-container {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  border-radius: 8px;
+  background-color: #fff;
+  padding: 10px 15px;
+}
+
+.todo__input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: none;
+  border-bottom: 1px solid #000;
+  outline: none;
+}
+
+.todo__button {
+  background-color: #4fbe38;
+}
+
+.todo__list {
+}
+
+.todo__item-container {
+  display: flex;
+  align-items: center;
+}
+
+.todo__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 8px;
+  background-color: #fff;
+  padding: 10px 15px;
+  margin-bottom: 10px;
+}
+.todo__item:last-child {
+  margin-bottom: 0;
+}
+
+.todo__input-read {
+  padding-bottom: 0;
+  border: none;
+  margin-left: 10px;
+}
+
+.completed {
+  text-decoration: line-through;
+  opacity: 0.6;
 }
