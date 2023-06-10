@@ -26,6 +26,8 @@ let timerInterval;
 let timeRemaining = 0;
 let activeTimer;
 let pomodoroCount = 0;
+let pomodoroCountTaskValue = 0;
+let isFirstStart = true;
 
 let pomodoroDuration = parseInt(localStorage.getItem("pomodoroDuration")) || 25;
 let shortBreakDuration =
@@ -73,6 +75,7 @@ function resetTimer() {
       setTimeDisplay(pomodoroDuration.toString().padStart(2, "0"), "00");
       timeRemaining = pomodoroDuration;
       pomodoroCount++;
+      pomodoroCountTaskValue++;
       if (pomodoroCount === intervalPomodoroCount) {
         setActiveTimer("longBreak");
         pomodoroCount = 0;
@@ -96,16 +99,24 @@ function resetTimer() {
       pomodoroCount = 0;
       setActiveTimer("pomodoro");
   }
+  isTimerRunning = false;
 }
 
 function handleStart() {
-  if (!activeTimer) {
-    setActiveTimer("pomodoro");
-    timeRemaining = pomodoroDuration;
-    pomodoroCount++;
-    setActiveTimer("shortBreak");
-  }
   if (timeRemaining > 0) {
+    if (isFirstStart) {
+      setTimeDisplay(pomodoroDuration.toString().padStart(2, "0"), "00");
+      timeRemaining = pomodoroDuration;
+      pomodoroCount++;
+      pomodoroCountTaskValue++;
+      if (pomodoroCount === intervalPomodoroCount) {
+        setActiveTimer("longBreak");
+        pomodoroCount = 0;
+      } else {
+        setActiveTimer("shortBreak");
+      }
+      isFirstStart = false;
+    }
     startTimer(timeRemaining);
     startBtn.style.display = "none";
     pauseBtn.style.display = "block";
@@ -269,7 +280,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (savedTasks) {
     const taskData = JSON.parse(savedTasks);
     taskData.forEach((task) => {
-      addTask(task.text);
+      addTask(task.text, task.completedPomodoros);
       const taskItem = document.getElementById(task.id);
       const checkbox = document.getElementById(`taskCheckbox_${task.id}`);
       const todoItem = document.getElementById(`todoItem_${task.id}`);
@@ -291,6 +302,9 @@ function saveTasksToLocalStorage() {
     id: task.id,
     text: task.querySelector(".todo__input").value,
     completed: task.classList.contains("completed"),
+    completedPomodoros: parseInt(
+      task.querySelector(".todo__counter").textContent.split("/")[0]
+    ),
   }));
 
   localStorage.setItem("tasks", JSON.stringify(taskData));
@@ -318,18 +332,35 @@ taskInput.addEventListener("input", checkTaskInputs);
 
 taskInput.addEventListener("keypress", function (event) {
   if (event.key === "Enter" && !addTaskButton.disabled) {
-    addTask(taskInput.value);
+    addTask(taskInput.value, pomodoroCountTaskValue);
     taskInput.value = "";
   }
 });
 
 addTaskButton.addEventListener("click", function () {
-  addTask(taskInput.value);
+  addTask(taskInput.value, pomodoroCountTaskValue);
   taskInput.value = "";
 });
 
+// function updatePomodoroCounter() {
+//   const todoItems = document.querySelectorAll(".todo__item");
+//   todoItems.forEach((item) => {
+//     const taskId = item.id.split("_")[1];
+//     const pomodoroCounter = document.querySelector(
+//       `#pomodoroCounter_${taskId}`
+//     );
+//     const pomodoroCountTaskValue = parseInt(pomodoroCountTask.value);
+//     const completedPomodoros = item.classList.contains("completed")
+//       ? pomodoroCountTaskValue
+//       : 0;
+//     pomodoroCounter.textContent = `${completedPomodoros}/${pomodoroCountTaskValue}`;
+//   });
+// }
+
+// pomodoroCountTask.addEventListener("input", updatePomodoroCounter);
+
 let taskIdCounter = 0;
-function addTask(taskText) {
+function addTask(taskText, completedPomodoros = 0) {
   const taskId = `task_${taskIdCounter++}`;
 
   const taskItem = `
@@ -337,6 +368,7 @@ function addTask(taskText) {
           <div class="todo__item-container">
             <input id="taskCheckbox_${taskId}" type="checkbox" class="todo__checkbox">
             <input id="${taskId}" type="text" class="todo__input-read todo__input" value="${taskText}" readonly>
+            <span id="pomodoroCounter_${taskId}" class="todo__counter">${completedPomodoros}/${pomodoroCountTask.value}</span>
           </div>
           <span id="removeTask" class="close">&times;</span>
       </li>
@@ -356,6 +388,7 @@ function addTask(taskText) {
       todoItem.classList.remove("completed");
     }
 
+    // updatePomodoroCounter();
     saveTasksToLocalStorage();
   });
 

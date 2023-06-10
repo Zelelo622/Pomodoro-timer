@@ -350,11 +350,6 @@ button:hover {
 .todo__list {
 }
 
-.todo__item-container {
-  display: flex;
-  align-items: center;
-}
-
 .todo__item {
   display: flex;
   align-items: center;
@@ -368,10 +363,19 @@ button:hover {
   margin-bottom: 0;
 }
 
+.todo__item-container {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+}
+
 .todo__input-read {
   padding-bottom: 0;
   border: none;
   margin-left: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .completed {
