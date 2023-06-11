@@ -22,11 +22,13 @@ const intervalInput = document.querySelector("#intervalInput");
 const resetOriginalButton = document.querySelector("#resetOriginalButton");
 const okButton = document.querySelector("#okButton");
 
+const timerTitle = document.querySelector('#timerTitle');
+
 let timerInterval;
 let timeRemaining = 0;
 let activeTimer;
 let pomodoroCount = 0;
-let pomodoroCountTaskValue = 0;
+let pomodoroCountTaskVal = 0;
 let isFirstStart = true;
 
 let pomodoroDuration = parseInt(localStorage.getItem("pomodoroDuration")) || 25;
@@ -75,7 +77,8 @@ function resetTimer() {
       setTimeDisplay(pomodoroDuration.toString().padStart(2, "0"), "00");
       timeRemaining = pomodoroDuration;
       pomodoroCount++;
-      pomodoroCountTaskValue++;
+      pomodoroCountTaskVal++;
+      timerTitle.textContent = "Pomodoro"
       if (pomodoroCount === intervalPomodoroCount) {
         setActiveTimer("longBreak");
         pomodoroCount = 0;
@@ -86,17 +89,20 @@ function resetTimer() {
     case "shortBreak":
       setTimeDisplay(shortBreakDuration.toString().padStart(2, "0"), "00");
       timeRemaining = shortBreakDuration;
+      timerTitle.textContent = "Short Break"
       setActiveTimer("pomodoro");
       break;
     case "longBreak":
       setTimeDisplay(longBreakDuration.toString().padStart(2, "0"), "00");
       timeRemaining = longBreakDuration;
+      timerTitle.textContent = "Long Break"
       setActiveTimer("pomodoro");
       break;
     default:
       setTimeDisplay(pomodoroDuration.toString().padStart(2, "0"), "00");
       timeRemaining = pomodoroDuration;
       pomodoroCount = 0;
+      timerTitle.textContent = "Pomodoro"
       setActiveTimer("pomodoro");
   }
   isTimerRunning = false;
@@ -108,7 +114,7 @@ function handleStart() {
       setTimeDisplay(pomodoroDuration.toString().padStart(2, "0"), "00");
       timeRemaining = pomodoroDuration;
       pomodoroCount++;
-      pomodoroCountTaskValue++;
+      pomodoroCountTaskVal++;
       if (pomodoroCount === intervalPomodoroCount) {
         setActiveTimer("longBreak");
         pomodoroCount = 0;
@@ -332,35 +338,18 @@ taskInput.addEventListener("input", checkTaskInputs);
 
 taskInput.addEventListener("keypress", function (event) {
   if (event.key === "Enter" && !addTaskButton.disabled) {
-    addTask(taskInput.value, pomodoroCountTaskValue);
+    addTask(taskInput.value);
     taskInput.value = "";
   }
 });
 
 addTaskButton.addEventListener("click", function () {
-  addTask(taskInput.value, pomodoroCountTaskValue);
+  addTask(taskInput.value);
   taskInput.value = "";
 });
 
-// function updatePomodoroCounter() {
-//   const todoItems = document.querySelectorAll(".todo__item");
-//   todoItems.forEach((item) => {
-//     const taskId = item.id.split("_")[1];
-//     const pomodoroCounter = document.querySelector(
-//       `#pomodoroCounter_${taskId}`
-//     );
-//     const pomodoroCountTaskValue = parseInt(pomodoroCountTask.value);
-//     const completedPomodoros = item.classList.contains("completed")
-//       ? pomodoroCountTaskValue
-//       : 0;
-//     pomodoroCounter.textContent = `${completedPomodoros}/${pomodoroCountTaskValue}`;
-//   });
-// }
-
-// pomodoroCountTask.addEventListener("input", updatePomodoroCounter);
-
 let taskIdCounter = 0;
-function addTask(taskText, completedPomodoros = 0) {
+function addTask(taskText) {
   const taskId = `task_${taskIdCounter++}`;
 
   const taskItem = `
@@ -368,7 +357,7 @@ function addTask(taskText, completedPomodoros = 0) {
           <div class="todo__item-container">
             <input id="taskCheckbox_${taskId}" type="checkbox" class="todo__checkbox">
             <input id="${taskId}" type="text" class="todo__input-read todo__input" value="${taskText}" readonly>
-            <span id="pomodoroCounter_${taskId}" class="todo__counter">${completedPomodoros}/${pomodoroCountTask.value}</span>
+            <span id="pomodoroCounter_${taskId}" class="todo__counter">0/${pomodoroCountTask.value}</span>
           </div>
           <span id="removeTask" class="close">&times;</span>
       </li>
