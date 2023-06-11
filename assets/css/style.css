@@ -368,6 +368,11 @@ button:hover {
   margin-bottom: 0;
 }
 
+.todo__item.active {
+  background-color: #f0f0f0;
+  color: #000;
+}
+
 .todo__item-container {
   display: flex;
   align-items: center;

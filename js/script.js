@@ -22,13 +22,12 @@ const intervalInput = document.querySelector("#intervalInput");
 const resetOriginalButton = document.querySelector("#resetOriginalButton");
 const okButton = document.querySelector("#okButton");
 
-const timerTitle = document.querySelector('#timerTitle');
+const timerTitle = document.querySelector("#timerTitle");
 
 let timerInterval;
 let timeRemaining = 0;
 let activeTimer;
 let pomodoroCount = 0;
-let pomodoroCountTaskVal = 0;
 let isFirstStart = true;
 
 let pomodoroDuration = parseInt(localStorage.getItem("pomodoroDuration")) || 25;
@@ -77,8 +76,7 @@ function resetTimer() {
       setTimeDisplay(pomodoroDuration.toString().padStart(2, "0"), "00");
       timeRemaining = pomodoroDuration;
       pomodoroCount++;
-      pomodoroCountTaskVal++;
-      timerTitle.textContent = "Pomodoro"
+      timerTitle.textContent = "Pomodoro";
       if (pomodoroCount === intervalPomodoroCount) {
         setActiveTimer("longBreak");
         pomodoroCount = 0;
@@ -89,21 +87,22 @@ function resetTimer() {
     case "shortBreak":
       setTimeDisplay(shortBreakDuration.toString().padStart(2, "0"), "00");
       timeRemaining = shortBreakDuration;
-      timerTitle.textContent = "Short Break"
+      timerTitle.textContent = "Short Break";
       setActiveTimer("pomodoro");
       break;
     case "longBreak":
       setTimeDisplay(longBreakDuration.toString().padStart(2, "0"), "00");
       timeRemaining = longBreakDuration;
-      timerTitle.textContent = "Long Break"
+      timerTitle.textContent = "Long Break";
       setActiveTimer("pomodoro");
       break;
     default:
       setTimeDisplay(pomodoroDuration.toString().padStart(2, "0"), "00");
       timeRemaining = pomodoroDuration;
       pomodoroCount = 0;
-      timerTitle.textContent = "Pomodoro"
+      timerTitle.textContent = "Pomodoro";
       setActiveTimer("pomodoro");
+      break;
   }
   isTimerRunning = false;
 }
@@ -114,7 +113,6 @@ function handleStart() {
       setTimeDisplay(pomodoroDuration.toString().padStart(2, "0"), "00");
       timeRemaining = pomodoroDuration;
       pomodoroCount++;
-      pomodoroCountTaskVal++;
       if (pomodoroCount === intervalPomodoroCount) {
         setActiveTimer("longBreak");
         pomodoroCount = 0;
@@ -286,15 +284,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (savedTasks) {
     const taskData = JSON.parse(savedTasks);
     taskData.forEach((task) => {
-      addTask(task.text, task.completedPomodoros);
-      const taskItem = document.getElementById(task.id);
-      const checkbox = document.getElementById(`taskCheckbox_${task.id}`);
-      const todoItem = document.getElementById(`todoItem_${task.id}`);
-      if (task.completed) {
-        taskItem.classList.add("completed");
-        checkbox.checked = true;
-        todoItem.classList.add("completed");
-      }
+      addTask( task.id, task.text, task.completed, task.completedPomodoros, task.selectedPomodors);
     });
   }
 
@@ -308,9 +298,8 @@ function saveTasksToLocalStorage() {
     id: task.id,
     text: task.querySelector(".todo__input").value,
     completed: task.classList.contains("completed"),
-    completedPomodoros: parseInt(
-      task.querySelector(".todo__counter").textContent.split("/")[0]
-    ),
+    completedPomodoros: parseInt(task.querySelector(".todo__counter").textContent.split("/")[0]),
+    selectedPomodors: parseInt(task.querySelector(".todo__counter").getAttribute("data-selected-pomodors")),
   }));
 
   localStorage.setItem("tasks", JSON.stringify(taskData));
@@ -320,7 +309,7 @@ function checkTaskInputs() {
   const pomodoroCountTaskValue = parseInt(pomodoroCountTask.value);
 
   const hasEmptyInput = isNaN(pomodoroCountTaskValue);
-  const hasNegativeInput = pomodoroCountTaskValue < 0;
+  const hasNegativeInput = pomodoroCountTaskValue <= 0;
 
   const isTextEmpty = taskInput.value.trim() === "";
 
@@ -338,73 +327,69 @@ taskInput.addEventListener("input", checkTaskInputs);
 
 taskInput.addEventListener("keypress", function (event) {
   if (event.key === "Enter" && !addTaskButton.disabled) {
-    addTask(taskInput.value);
+    const taskId = Date.now().toString();
+    addTask(taskId, taskInput.value, false, 0, parseInt(pomodoroCountTask.value));
     taskInput.value = "";
+    pomodoroCountTask.value = 1;
   }
 });
 
 addTaskButton.addEventListener("click", function () {
-  addTask(taskInput.value);
+  const taskId = Date.now().toString();
+  addTask(taskId, taskInput.value, false, 0, parseInt(pomodoroCountTask.value));
   taskInput.value = "";
+  pomodoroCountTask.value = 1;
 });
 
-let taskIdCounter = 0;
-function addTask(taskText) {
-  const taskId = `task_${taskIdCounter++}`;
+function toggleTaskCompletion(taskId) {
+  const taskItem = document.getElementById(`todoItem_${taskId}`);
+  const checkbox = document.getElementById(`taskCheckbox_${taskId}`);
+  const todoItem = document.getElementById(`todoItem_${taskId}`);
 
+  if (checkbox.checked) {
+    taskItem.classList.add("completed");
+    todoItem.classList.add("completed");
+  } else {
+    taskItem.classList.remove("completed");
+    todoItem.classList.remove("completed");
+  }
+
+  saveTasksToLocalStorage();
+}
+
+function addTask(id, text, completed, completedPomodoros, selectedPomodors) {
   const taskItem = `
-      <li id="todoItem_${taskId}" class="todo__item">
-          <div class="todo__item-container">
-            <input id="taskCheckbox_${taskId}" type="checkbox" class="todo__checkbox">
-            <input id="${taskId}" type="text" class="todo__input-read todo__input" value="${taskText}" readonly>
-            <span id="pomodoroCounter_${taskId}" class="todo__counter">0/${pomodoroCountTask.value}</span>
-          </div>
-          <span id="removeTask" class="close">&times;</span>
-      </li>
+    <li id="todoItem_${id}" class="todo__item${completed ? " completed" : ""}">
+      <div class="todo__item-container">
+        <input id="taskCheckbox_${id}" type="checkbox" class="todo__checkbox"${completed ? " checked" : ""}>
+        <input id="task_${id}" type="text" class="todo__input-read todo__input" value="${text}" readonly>
+        <span id="pomodoroCounter_${id}" class="todo__counter" data-selected-pomodors="${selectedPomodors}">${completedPomodoros}/${selectedPomodors}</span>
+      </div>
+      <span id="removeTask_${id}" class="close">&times;</span>
+    </li>
   `;
   todoList.insertAdjacentHTML("beforeend", taskItem);
 
-  const taskLabel = document.querySelector(`#${taskId}`);
-  const checkbox = document.querySelector(`#taskCheckbox_${taskId}`);
-  const todoItem = document.querySelector(`#todoItem_${taskId}`);
+  const checkbox = document.getElementById(`taskCheckbox_${id}`);
+  const removeButton = document.getElementById(`removeTask_${id}`);
 
   checkbox.addEventListener("change", function () {
-    if (this.checked) {
-      taskLabel.classList.add("completed");
-      todoItem.classList.add("completed");
-    } else {
-      taskLabel.classList.remove("completed");
-      todoItem.classList.remove("completed");
-    }
-
-    // updatePomodoroCounter();
-    saveTasksToLocalStorage();
-  });
-
-  taskLabel.addEventListener("click", function () {
-    this.removeAttribute("readonly");
-    this.focus();
-  });
-
-  taskLabel.addEventListener("blur", function () {
-    this.setAttribute("readonly", true);
-    saveTasksToLocalStorage();
-  });
-
-  taskLabel.addEventListener("keypress", function (event) {
-    if (event.key === "Enter") {
-      this.setAttribute("readonly", true);
-      saveTasksToLocalStorage();
-    }
+    toggleTaskCompletion(id);
   });
 
   saveTasksToLocalStorage();
 }
 
 todoList.addEventListener("click", function (event) {
-  if (event.target.id === "removeTask") {
-    const taskItem = event.target.parentNode;
+  const targetId = event.target.id;
+
+  if (targetId.startsWith("removeTask_")) {
+    const taskId = targetId.replace("removeTask_", "");
+    const taskItem = document.getElementById(`todoItem_${taskId}`);
     taskItem.remove();
     saveTasksToLocalStorage();
+  } else if (targetId.startsWith("taskCheckbox_")) {
+    const taskId = targetId.replace("taskCheckbox_", "");
+    toggleTaskCompletion(taskId);
   }
 });
