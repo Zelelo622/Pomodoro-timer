@@ -29,6 +29,7 @@ let timeRemaining = 0;
 let activeTimer;
 let pomodoroCount = 0;
 let isFirstStart = true;
+let pomodoroTaskCount = 0;
 
 let pomodoroDuration = parseInt(localStorage.getItem("pomodoroDuration")) || 25;
 let shortBreakDuration =
@@ -76,6 +77,7 @@ function resetTimer() {
       setTimeDisplay(pomodoroDuration.toString().padStart(2, "0"), "00");
       timeRemaining = pomodoroDuration;
       pomodoroCount++;
+      pomodoroTaskCount++;
       timerTitle.textContent = "Pomodoro";
       if (pomodoroCount === intervalPomodoroCount) {
         setActiveTimer("longBreak");
@@ -113,6 +115,7 @@ function handleStart() {
       setTimeDisplay(pomodoroDuration.toString().padStart(2, "0"), "00");
       timeRemaining = pomodoroDuration;
       pomodoroCount++;
+      pomodoroTaskCount++;
       if (pomodoroCount === intervalPomodoroCount) {
         setActiveTimer("longBreak");
         pomodoroCount = 0;
@@ -342,9 +345,9 @@ addTaskButton.addEventListener("click", function () {
 });
 
 function toggleTaskCompletion(taskId) {
-  const taskItem = document.getElementById(`todoItem_${taskId}`);
+  const taskItem = document.getElementById(taskId);
   const checkbox = document.getElementById(`taskCheckbox_${taskId}`);
-  const todoItem = document.getElementById(`todoItem_${taskId}`);
+  const todoItem = document.getElementById(taskId);
 
   if (checkbox.checked) {
     taskItem.classList.add("completed");
@@ -357,9 +360,10 @@ function toggleTaskCompletion(taskId) {
   saveTasksToLocalStorage();
 }
 
+
 function addTask(id, text, completed, completedPomodoros, selectedPomodors) {
   const taskItem = `
-    <li id="todoItem_${id}" class="todo__item${completed ? " completed" : ""}">
+    <li id="${id}" class="todo__item${completed ? " completed" : ""}">
       <div class="todo__item-container">
         <input id="taskCheckbox_${id}" type="checkbox" class="todo__checkbox"${completed ? " checked" : ""}>
         <input id="task_${id}" type="text" class="todo__input-read todo__input" value="${text}" readonly>
@@ -371,7 +375,6 @@ function addTask(id, text, completed, completedPomodoros, selectedPomodors) {
   todoList.insertAdjacentHTML("beforeend", taskItem);
 
   const checkbox = document.getElementById(`taskCheckbox_${id}`);
-  const removeButton = document.getElementById(`removeTask_${id}`);
 
   checkbox.addEventListener("change", function () {
     toggleTaskCompletion(id);
@@ -385,7 +388,7 @@ todoList.addEventListener("click", function (event) {
 
   if (targetId.startsWith("removeTask_")) {
     const taskId = targetId.replace("removeTask_", "");
-    const taskItem = document.getElementById(`todoItem_${taskId}`);
+    const taskItem = document.getElementById(taskId);
     taskItem.remove();
     saveTasksToLocalStorage();
   } else if (targetId.startsWith("taskCheckbox_")) {
@@ -393,3 +396,4 @@ todoList.addEventListener("click", function (event) {
     toggleTaskCompletion(taskId);
   }
 });
+
