@@ -395,5 +395,23 @@ todoList.addEventListener("click", function (event) {
     const taskId = targetId.replace("taskCheckbox_", "");
     toggleTaskCompletion(taskId);
   }
+
+  const target = event.target.closest("li");
+
+  if (target && !event.target.classList.contains("todo__checkbox")) {
+    const isActive = target.classList.contains("active");
+
+    if (isActive) {
+      target.classList.remove("active");
+    } else {
+      const allItems = todoList.querySelectorAll("li");
+
+      allItems.forEach(item => {
+        item.classList.remove("active");
+      });
+
+      target.classList.add("active");
+    }
+  }
 });
 

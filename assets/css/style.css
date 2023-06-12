@@ -363,14 +363,14 @@ button:hover {
   background-color: #fff;
   padding: 10px 15px;
   margin-bottom: 10px;
+  cursor: pointer;
 }
 .todo__item:last-child {
   margin-bottom: 0;
 }
 
 .todo__item.active {
-  background-color: #f0f0f0;
-  color: #000;
+  border-left: 5px solid #000;
 }
 
 .todo__item-container {
@@ -386,6 +386,19 @@ button:hover {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  cursor: pointer;
+}
+
+.todo__checkbox {
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.todo__checkbox:hover {
+  opacity: 0.5;
+}
+
+.todo__counter {
+  margin-right: 8px;
 }
 
 .completed {
