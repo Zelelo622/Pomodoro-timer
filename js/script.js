@@ -29,24 +29,20 @@ let timeRemaining = 0;
 let activeTimer;
 let pomodoroCount = 0;
 let isFirstStart = true;
-let pomodoroTaskCount = 0;
 
 let pomodoroDuration = parseInt(localStorage.getItem("pomodoroDuration")) || 25;
-let shortBreakDuration =
-  parseInt(localStorage.getItem("shortBreakDuration")) || 5;
-let longBreakDuration =
-  parseInt(localStorage.getItem("longBreakDuration")) || 15;
-let intervalPomodoroCount =
-  parseInt(localStorage.getItem("intervalPomodoroCount")) || 4;
+let shortBreakDuration = parseInt(localStorage.getItem("shortBreakDuration")) || 5;
+let longBreakDuration = parseInt(localStorage.getItem("longBreakDuration")) || 15;
+let intervalPomodoroCount = parseInt(localStorage.getItem("intervalPomodoroCount")) || 4;
 
 document.addEventListener("DOMContentLoaded", function () {
-  updateDataFromLocalStorage();
+  updatePomodoroLocalStorage();
   checkInputs();
 });
 
 // Pomodoro timer
 
-function startTimer(duration) {
+function startTimer(duration, itemId) {
   let timer = duration * 60;
 
   timerInterval = setInterval(function () {
@@ -64,6 +60,7 @@ function startTimer(duration) {
         alert("Таймер завершился!");
         resetTimer();
         handleStart();
+        updateCompletedPomodoros(itemId);
       }, 1000);
     }
   }, 1000);
@@ -77,7 +74,6 @@ function resetTimer() {
       setTimeDisplay(pomodoroDuration.toString().padStart(2, "0"), "00");
       timeRemaining = pomodoroDuration;
       pomodoroCount++;
-      pomodoroTaskCount++;
       timerTitle.textContent = "Pomodoro";
       if (pomodoroCount === intervalPomodoroCount) {
         setActiveTimer("longBreak");
@@ -111,11 +107,11 @@ function resetTimer() {
 
 function handleStart() {
   if (timeRemaining > 0) {
+    const selectedItem = todoList.querySelector("li.active"); // Получаем выбранный элемент li
     if (isFirstStart) {
       setTimeDisplay(pomodoroDuration.toString().padStart(2, "0"), "00");
       timeRemaining = pomodoroDuration;
       pomodoroCount++;
-      pomodoroTaskCount++;
       if (pomodoroCount === intervalPomodoroCount) {
         setActiveTimer("longBreak");
         pomodoroCount = 0;
@@ -124,7 +120,11 @@ function handleStart() {
       }
       isFirstStart = false;
     }
-    startTimer(timeRemaining);
+    if (selectedItem) {
+      startTimer(timeRemaining, selectedItem.id);
+    } else {
+      startTimer(timeRemaining);
+    }
     startBtn.style.display = "none";
     pauseBtn.style.display = "block";
     resetBtn.style.display = "block";
@@ -225,7 +225,7 @@ function checkInputs() {
   }
 }
 
-function updateDataFromLocalStorage() {
+function updatePomodoroLocalStorage() {
   setTimeDisplay(pomodoroDuration.toString().padStart(2, "0"), "00");
   timeRemaining = pomodoroDuration;
   pomodoroCount = 0;
@@ -287,7 +287,13 @@ document.addEventListener("DOMContentLoaded", function () {
   if (savedTasks) {
     const taskData = JSON.parse(savedTasks);
     taskData.forEach((task) => {
-      addTask( task.id, task.text, task.completed, task.completedPomodoros, task.selectedPomodors);
+      addTask(
+        task.id,
+        task.text,
+        task.completed,
+        task.completedPomodoros,
+        task.selectedPomodors
+      );
     });
   }
 
@@ -331,7 +337,13 @@ taskInput.addEventListener("input", checkTaskInputs);
 taskInput.addEventListener("keypress", function (event) {
   if (event.key === "Enter" && !addTaskButton.disabled) {
     const taskId = Date.now().toString();
-    addTask(taskId, taskInput.value, false, 0, parseInt(pomodoroCountTask.value));
+    addTask(
+      taskId,
+      taskInput.value,
+      false,
+      0,
+      parseInt(pomodoroCountTask.value)
+    );
     taskInput.value = "";
     pomodoroCountTask.value = 1;
   }
@@ -360,6 +372,17 @@ function toggleTaskCompletion(taskId) {
   saveTasksToLocalStorage();
 }
 
+function updateCompletedPomodoros(itemId) {
+  const todoItem = document.getElementById(itemId);
+  if (todoItem) {
+    const counterElement = todoItem.querySelector(".todo__counter");
+    const counterText = counterElement.textContent;
+    const [completedPomodoros, selectedPomodoros] = counterText.split("/");
+    const updatedCompletedPomodoros = parseInt(completedPomodoros) + 1;
+    counterElement.textContent = `${updatedCompletedPomodoros}/${selectedPomodoros}`;
+    saveTasksToLocalStorage();
+  }
+}
 
 function addTask(id, text, completed, completedPomodoros, selectedPomodors) {
   const taskItem = `
@@ -406,7 +429,7 @@ todoList.addEventListener("click", function (event) {
     } else {
       const allItems = todoList.querySelectorAll("li");
 
-      allItems.forEach(item => {
+      allItems.forEach((item) => {
         item.classList.remove("active");
       });
 
@@ -414,4 +437,3 @@ todoList.addEventListener("click", function (event) {
     }
   }
 });
-
