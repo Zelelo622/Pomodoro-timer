@@ -31,9 +31,12 @@ let pomodoroCount = 0;
 let isFirstStart = true;
 
 let pomodoroDuration = parseInt(localStorage.getItem("pomodoroDuration")) || 25;
-let shortBreakDuration = parseInt(localStorage.getItem("shortBreakDuration")) || 5;
-let longBreakDuration = parseInt(localStorage.getItem("longBreakDuration")) || 15;
-let intervalPomodoroCount = parseInt(localStorage.getItem("intervalPomodoroCount")) || 4;
+let shortBreakDuration =
+  parseInt(localStorage.getItem("shortBreakDuration")) || 5;
+let longBreakDuration =
+  parseInt(localStorage.getItem("longBreakDuration")) || 15;
+let intervalPomodoroCount =
+  parseInt(localStorage.getItem("intervalPomodoroCount")) || 4;
 
 document.addEventListener("DOMContentLoaded", function () {
   updatePomodoroLocalStorage();
@@ -60,7 +63,9 @@ function startTimer(duration, itemId) {
         alert("Таймер завершился!");
         resetTimer();
         handleStart();
-        updateCompletedPomodoros(itemId);
+        if (activeTimer === "pomodoro") {
+          updateCompletedPomodoros(itemId);
+        }
       }, 1000);
     }
   }, 1000);
@@ -107,7 +112,7 @@ function resetTimer() {
 
 function handleStart() {
   if (timeRemaining > 0) {
-    const selectedItem = todoList.querySelector("li.active"); // Получаем выбранный элемент li
+    const selectedItem = todoList.querySelector("li.active");
     if (isFirstStart) {
       setTimeDisplay(pomodoroDuration.toString().padStart(2, "0"), "00");
       timeRemaining = pomodoroDuration;
