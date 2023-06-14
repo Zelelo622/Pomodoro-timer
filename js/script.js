@@ -101,7 +101,6 @@ function resetTimer() {
       setActiveTimer("shortBreak");
       break;
   }
-  isTimerRunning = false;
 }
 
 function handleStart() {
@@ -326,7 +325,7 @@ function updateTasksLocalStorage() {
 
   const taskData = tasks.map((task) => ({
     id: task.id,
-    text: task.querySelector(".todo__input").value,
+    text: task.querySelector(".todo__update-input").value,
     completed: task.classList.contains("completed"),
     completedPomodoros: parseInt(task.querySelector('.todo__completed-pomodoros').textContent),
     selectedPomodors: parseInt(task.querySelector('.todo__selected-pomodors').value),
@@ -401,6 +400,86 @@ function toggleTaskCompletion(taskId) {
   saveTasksToLocalStorage();
 }
 
+let previousInputTextValue = '';
+let previousInputSelectedPomodoros = '';
+
+function handleEditBtnClick(id) {
+  const allItems = todoList.querySelectorAll("li");
+
+  allItems.forEach((item) => {
+    item.classList.remove("active");
+    localStorage.removeItem("activeTask");
+  });
+
+  const editBtnTask = document.getElementById(`editTask_${id}`);
+  const removeBtnTask = document.getElementById(`removeTask_${id}`);
+  const taskInput = document.getElementById(`task_${id}`);
+  const itemUpdateContainer = document.querySelector(`[id="${id}"] .todo__item-updateContainer`);
+
+  editBtnTask.classList.add("hidden");
+  removeBtnTask.classList.remove("hidden");
+  taskInput.removeAttribute("readonly");
+  taskInput.classList.remove("todo__input-read");
+  taskInput.classList.add("todo__update-input");
+  itemUpdateContainer.classList.remove("hidden");
+  itemUpdateContainer.style.marginTop = "30px";
+
+  previousInputTextValue = taskInput.value;
+
+  const pomodoroCounterSpan = document.getElementById(`pomodoroCounter_${id}`);
+  const completedPomodorosSpan = document.getElementById(`completedPomodoros_${id}`);
+  const completedPomodoros = parseInt(pomodoroCounterSpan.textContent.split("/")[0]);
+  const selectedPomodorsInput = document.getElementById(`selectedPomodors_${id}`);
+  const selectedPomodors = parseInt(selectedPomodorsInput.value);
+
+  completedPomodorosSpan.textContent = `${completedPomodoros} /`;
+
+  previousInputSelectedPomodoros = selectedPomodors;
+}
+
+function handleSaveBtnClick(id) {
+  const selectedPomodorsInput = document.getElementById(`selectedPomodors_${id}`);
+  const selectedPomodors = parseInt(selectedPomodorsInput.value);
+  const pomodoroCounterSpan = document.getElementById(`pomodoroCounter_${id}`);
+  const completedPomodoros = parseInt(pomodoroCounterSpan.textContent.split("/")[0]);
+
+  pomodoroCounterSpan.textContent = `${completedPomodoros}/${selectedPomodors}`;
+
+  updateTasksLocalStorage();
+
+  const editBtnTask = document.getElementById(`editTask_${id}`);
+  const removeBtnTask = document.getElementById(`removeTask_${id}`);
+  const taskInput = document.getElementById(`task_${id}`);
+  const itemUpdateContainer = document.querySelector(`[id="${id}"] .todo__item-updateContainer`);
+
+  taskInput.classList.add("todo__input-read");
+  taskInput.classList.remove("todo__update-input");
+  itemUpdateContainer.classList.add("hidden");
+  removeBtnTask.classList.add("hidden");
+  editBtnTask.classList.remove("hidden");
+}
+
+function handleCancelBtnClick(id) {
+  const taskInput = document.getElementById(`task_${id}`);
+  const editBtnTask = document.getElementById(`editTask_${id}`);
+  const removeBtnTask = document.getElementById(`removeTask_${id}`);
+  const itemUpdateContainer = document.querySelector(`[id="${id}"] .todo__item-updateContainer`);
+  const selectedPomodorsInput = document.getElementById(`selectedPomodors_${id}`);
+
+  taskInput.classList.add("todo__input-read");
+  taskInput.classList.remove("todo__update-input");
+  editBtnTask.classList.remove("hidden");
+  removeBtnTask.classList.add("hidden");
+
+  taskInput.setAttribute("readonly", true);
+
+  taskInput.value = previousInputTextValue;
+
+  selectedPomodorsInput.value = previousInputSelectedPomodoros;
+
+  itemUpdateContainer.classList.add("hidden");
+}
+
 function updateCompletedPomodoros(itemId) {
   const todoItem = document.getElementById(itemId);
   if (todoItem) {
@@ -443,61 +522,21 @@ function addTask(id, text, completed, completedPomodoros, selectedPomodors) {
   const editBtnTask = document.getElementById(`editTask_${id}`);
   const cancelBtnTask = document.getElementById(`cancelTask_${id}`);
   const saveBtnTask = document.getElementById(`saveTask_${id}`);
-  const removeBtnTask = document.getElementById(`removeTask_${id}`);
-  const taskInput = document.getElementById(`task_${id}`);
-  const itemUpdateContainer = document.querySelector(`[id="${id}"] .todo__item-updateContainer`);
 
   checkbox.addEventListener("change", function () {
     toggleTaskCompletion(id);
   });
 
   editBtnTask.addEventListener("click", function () {
-    const allItems = todoList.querySelectorAll("li");
-
-    allItems.forEach((item) => {
-      item.classList.remove("active");
-      localStorage.removeItem("activeTask");
-    });
-
-    editBtnTask.classList.add("hidden");
-    removeBtnTask.classList.remove("hidden");
-    taskInput.removeAttribute("readonly");
-    taskInput.classList.remove("todo__input-read");
-    itemUpdateContainer.classList.remove("hidden");
-    itemUpdateContainer.style.marginTop = "30px";
-
-    const pomodoroCounterSpan = document.getElementById(`pomodoroCounter_${id}`);
-    const completedPomodorosSpan = document.getElementById(`completedPomodoros_${id}`);
-    const completedPomodoros = parseInt(pomodoroCounterSpan.textContent.split("/")[0]);
-    
-    completedPomodorosSpan.textContent = `${completedPomodoros} /`;
+    handleEditBtnClick(id);
   });
 
   saveBtnTask.addEventListener("click", function () {
-    const selectedPomodorsInput = document.getElementById(`selectedPomodors_${id}`);
-    const selectedPomodors = parseInt(selectedPomodorsInput.value);
-    const pomodoroCounterSpan = document.getElementById(`pomodoroCounter_${id}`);
-    
-    completedPomodoros = parseInt(pomodoroCounterSpan.textContent.split("/")[0]);
-    
-    pomodoroCounterSpan.textContent = `${completedPomodoros}/${selectedPomodors}`;
-    
-    updateTasksLocalStorage();
-  
-    taskInput.classList.add("todo__input-read");
-    itemUpdateContainer.classList.add("hidden");
-    removeBtnTask.classList.add("hidden");
-    editBtnTask.classList.remove("hidden");
+    handleSaveBtnClick(id);
   });
 
   cancelBtnTask.addEventListener("click", function () {
-    taskInput.classList.add("todo__input-read");
-    editBtnTask.classList.remove("hidden");
-    removeBtnTask.classList.add("hidden");
-
-    taskInput.setAttribute("readonly", true);
-
-    itemUpdateContainer.classList.add("hidden");
+    handleCancelBtnClick(id);
   });
 
   saveTasksToLocalStorage();
