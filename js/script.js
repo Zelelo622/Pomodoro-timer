@@ -300,6 +300,12 @@ document.addEventListener("DOMContentLoaded", function () {
         task.selectedPomodors
       );
     });
+
+    const activeTaskId = getActiveTaskFromLocalStorage();
+    if (activeTaskId) {
+      const activeTask = document.getElementById(activeTaskId);
+      activeTask.classList.add("active");
+    }
   }
 
   checkTaskInputs();
@@ -317,6 +323,14 @@ function saveTasksToLocalStorage() {
   }));
 
   localStorage.setItem("tasks", JSON.stringify(taskData));
+}
+
+function saveActiveTaskToLocalStorage(taskId) {
+  localStorage.setItem("activeTask", taskId);
+}
+
+function getActiveTaskFromLocalStorage() {
+  return localStorage.getItem("activeTask");
 }
 
 function checkTaskInputs() {
@@ -431,6 +445,7 @@ todoList.addEventListener("click", function (event) {
 
     if (isActive) {
       target.classList.remove("active");
+      localStorage.removeItem("activeTask");
     } else {
       const allItems = todoList.querySelectorAll("li");
 
@@ -439,6 +454,7 @@ todoList.addEventListener("click", function (event) {
       });
 
       target.classList.add("active");
+      saveActiveTaskToLocalStorage(target.id);
     }
   }
 });
