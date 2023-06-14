@@ -325,6 +325,20 @@ function saveTasksToLocalStorage() {
   localStorage.setItem("tasks", JSON.stringify(taskData));
 }
 
+function updateTasksLocalStorage() {
+  const tasks = Array.from(document.querySelectorAll(".todo__item"));
+
+  const taskData = tasks.map((task) => ({
+    id: task.id,
+    text: task.querySelector(".todo__input").value,
+    completed: task.classList.contains("completed"),
+    completedPomodoros: parseInt(task.querySelector('.todo__completed-pomodoros').textContent),
+    selectedPomodors: parseInt(task.querySelector('.todo__selected-pomodors').value),
+  }));
+
+  localStorage.setItem("tasks", JSON.stringify(taskData));
+}
+
 function saveActiveTaskToLocalStorage(taskId) {
   localStorage.setItem("activeTask", taskId);
 }
@@ -378,14 +392,14 @@ addTaskButton.addEventListener("click", function () {
 function toggleTaskCompletion(taskId) {
   const taskItem = document.getElementById(taskId);
   const checkbox = document.getElementById(`taskCheckbox_${taskId}`);
-  const todoItem = document.getElementById(taskId);
+  const taskText = document.getElementById(`task_${taskId}`);
 
   if (checkbox.checked) {
+    taskText.style.textDecoration = "line-through";
     taskItem.classList.add("completed");
-    todoItem.classList.add("completed");
   } else {
+    taskText.style.textDecoration = "none";
     taskItem.classList.remove("completed");
-    todoItem.classList.remove("completed");
   }
 
   saveTasksToLocalStorage();
@@ -406,20 +420,69 @@ function updateCompletedPomodoros(itemId) {
 function addTask(id, text, completed, completedPomodoros, selectedPomodors) {
   const taskItem = `
     <li id="${id}" class="todo__item${completed ? " completed" : ""}">
-      <div class="todo__item-container">
-        <input id="taskCheckbox_${id}" type="checkbox" class="todo__checkbox"${completed ? " checked" : ""}>
-        <input id="task_${id}" type="text" class="todo__input-read todo__input" value="${text}" readonly>
-        <span id="pomodoroCounter_${id}" class="todo__counter" data-selected-pomodors="${selectedPomodors}">${completedPomodoros}/${selectedPomodors}</span>
+      <div class="todo__item-mainContainer">
+        <div class="todo__item-container">
+          <input id="taskCheckbox_${id}" type="checkbox" class="todo__checkbox"${completed ? " checked" : ""}>
+          <input id="task_${id}" type="text" class="todo__input-read todo__input" value="${text}" readonly>
+          <span id="pomodoroCounter_${id}" class="todo__counter" data-selected-pomodors="${selectedPomodors}">${completedPomodoros}/${selectedPomodors}</span>
+        </div>
+        <button id="editTask_${id}" class="todo__edit">Редактировать</button>
+        <span id="removeTask_${id}" class="close hidden">&times;</span>
       </div>
-      <span id="removeTask_${id}" class="close">&times;</span>
+      <div class="todo__item-noneContainer hidden">
+        <div>
+          <span id="completedPomodoros_${id}" class="todo__completed-pomodoros">${completedPomodoros}/</span>
+          <input id="selectedPomodors_${id}" type="number" class="todo__selected-pomodors" value="${selectedPomodors}">
+        </div>
+        <div>
+          <button id="saveTask_${id}" class="todo__save">Сохранить</button>
+          <button id="cancelTask_${id}" class="todo__cancel">Отменить</button>
+        </div>
+      </div>
     </li>
   `;
   todoList.insertAdjacentHTML("beforeend", taskItem);
 
   const checkbox = document.getElementById(`taskCheckbox_${id}`);
+  const editBtnTask = document.getElementById(`editTask_${id}`);
+  const cancelBtnTask = document.getElementById(`cancelTask_${id}`);
+  const saveBtnTask = document.getElementById(`saveTask_${id}`);
+  const removeBtnTask = document.getElementById(`removeTask_${id}`);
+  const taskInput = document.getElementById(`task_${id}`);
+  const itemNoneContainer = document.querySelector(`[id="${id}"] .todo__item-noneContainer`);
 
   checkbox.addEventListener("change", function () {
     toggleTaskCompletion(id);
+  });
+
+  editBtnTask.addEventListener("click", function () {
+    editBtnTask.classList.add("hidden");
+    removeBtnTask.classList.remove("hidden");
+    taskInput.removeAttribute("readonly");
+    itemNoneContainer.classList.remove("hidden");
+    itemNoneContainer.style.marginTop = "30px";
+  });
+
+  saveBtnTask.addEventListener("click", function () {
+    const selectedPomodorsInput = document.getElementById(`selectedPomodors_${id}`);
+    const selectedPomodors = parseInt(selectedPomodorsInput.value);
+    const completedPomodorosSpan = document.getElementById(`completedPomodoros_${id}`);
+    completedPomodorosSpan.textContent = `${completedPomodoros}/${selectedPomodors}`;
+    
+    updateTasksLocalStorage();
+
+    itemNoneContainer.classList.add("hidden");
+    removeBtnTask.classList.add("hidden");
+    editBtnTask.classList.remove("hidden");
+  });
+
+  cancelBtnTask.addEventListener("click", function () {
+    editBtnTask.classList.remove("hidden");
+    removeBtnTask.classList.add("hidden");
+
+    taskInput.setAttribute("readonly", true);
+
+    itemNoneContainer.classList.add("hidden");
   });
 
   saveTasksToLocalStorage();

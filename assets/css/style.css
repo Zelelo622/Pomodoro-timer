@@ -357,8 +357,7 @@ button:hover {
 
 .todo__item {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
   border-radius: 8px;
   background-color: #fff;
   padding: 10px 15px;
@@ -371,6 +370,18 @@ button:hover {
 
 .todo__item.active {
   border-left: 5px solid #000;
+}
+
+.todo__item-mainContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.todo__item-noneContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .todo__item-container {
@@ -402,6 +413,9 @@ button:hover {
 }
 
 .completed {
-  text-decoration: line-through;
   opacity: 0.6;
+}
+
+.hidden {
+  display: none;
 }
