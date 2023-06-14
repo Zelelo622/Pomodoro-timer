@@ -30,17 +30,15 @@ let activeTimer;
 let pomodoroCount = 0;
 let isFirstStart = true;
 
-let pomodoroDuration = parseInt(localStorage.getItem("pomodoroDuration")) || 25;
-let shortBreakDuration =
-  parseInt(localStorage.getItem("shortBreakDuration")) || 5;
-let longBreakDuration =
-  parseInt(localStorage.getItem("longBreakDuration")) || 15;
-let intervalPomodoroCount =
-  parseInt(localStorage.getItem("intervalPomodoroCount")) || 4;
+let pomodoroDuration = parseFloat(localStorage.getItem("pomodoroDuration")) || 25;
+let shortBreakDuration = parseFloat(localStorage.getItem("shortBreakDuration")) || 5;
+let longBreakDuration = parseFloat(localStorage.getItem("longBreakDuration")) || 15;
+let intervalPomodoroCount = parseInt(localStorage.getItem("intervalPomodoroCount")) || 4;
 
 document.addEventListener("DOMContentLoaded", function () {
   updatePomodoroLocalStorage();
-  checkInputs();
+  updateTimerDisplay(pomodoroDuration * 60);
+  checkInputsSettings();
 });
 
 // Pomodoro timer
@@ -49,11 +47,7 @@ function startTimer(duration, itemId) {
   let timer = duration * 60;
 
   timerInterval = setInterval(function () {
-    const minutes = Math.floor(timer / 60);
-    const seconds = timer % 60;
-
-    minutesDisplay.textContent = minutes.toString().padStart(2, "0");
-    secondsDisplay.textContent = seconds.toString().padStart(2, "0");
+    updateTimerDisplay(timer);
 
     if (--timer < 0) {
       clearInterval(timerInterval);
@@ -76,7 +70,7 @@ function resetTimer() {
 
   switch (activeTimer) {
     case "pomodoro":
-      setTimeDisplay(pomodoroDuration.toString().padStart(2, "0"), "00");
+      updateTimerDisplay(pomodoroDuration * 60);
       timeRemaining = pomodoroDuration;
       pomodoroCount++;
       timerTitle.textContent = "Pomodoro";
@@ -88,23 +82,23 @@ function resetTimer() {
       }
       break;
     case "shortBreak":
-      setTimeDisplay(shortBreakDuration.toString().padStart(2, "0"), "00");
+      updateTimerDisplay(shortBreakDuration * 60);
       timeRemaining = shortBreakDuration;
       timerTitle.textContent = "Short Break";
       setActiveTimer("pomodoro");
       break;
     case "longBreak":
-      setTimeDisplay(longBreakDuration.toString().padStart(2, "0"), "00");
+      updateTimerDisplay(longBreakDuration * 60);
       timeRemaining = longBreakDuration;
       timerTitle.textContent = "Long Break";
       setActiveTimer("pomodoro");
       break;
     default:
-      setTimeDisplay(pomodoroDuration.toString().padStart(2, "0"), "00");
+      updateTimerDisplay(pomodoroDuration * 60);
       timeRemaining = pomodoroDuration;
       pomodoroCount = 0;
       timerTitle.textContent = "Pomodoro";
-      setActiveTimer("pomodoro");
+      setActiveTimer("shortBreak");
       break;
   }
   isTimerRunning = false;
@@ -112,9 +106,9 @@ function resetTimer() {
 
 function handleStart() {
   if (timeRemaining > 0) {
-    const selectedItem = todoList.querySelector("li.active");
+    const activeItemId = getActiveTaskFromLocalStorage();
     if (isFirstStart) {
-      setTimeDisplay(pomodoroDuration.toString().padStart(2, "0"), "00");
+      updateTimerDisplay(pomodoroDuration * 60);
       timeRemaining = pomodoroDuration;
       pomodoroCount++;
       if (pomodoroCount === intervalPomodoroCount) {
@@ -125,8 +119,8 @@ function handleStart() {
       }
       isFirstStart = false;
     }
-    if (selectedItem) {
-      startTimer(timeRemaining, selectedItem.id);
+    if (activeItemId) {
+      startTimer(timeRemaining, activeItemId);
     } else {
       startTimer(timeRemaining);
     }
@@ -136,13 +130,16 @@ function handleStart() {
   }
 }
 
-function setActiveTimer(timer) {
-  activeTimer = timer;
+function updateTimerDisplay(timer) {
+  const minutes = Math.floor(timer / 60);
+  const seconds = Math.ceil(timer % 60);
+
+  minutesDisplay.textContent = minutes.toString().padStart(2, "0");
+  secondsDisplay.textContent = seconds.toString().padStart(2, "0");
 }
 
-function setTimeDisplay(minutes, seconds) {
-  minutesDisplay.textContent = minutes;
-  secondsDisplay.textContent = seconds;
+function setActiveTimer(timer) {
+  activeTimer = timer;
 }
 
 function handleButtonStart() {
@@ -204,10 +201,10 @@ window.addEventListener("click", function (e) {
   }
 });
 
-function checkInputs() {
-  const pomodoroValue = parseInt(pomodoroInput.value);
-  const shortBreakValue = parseInt(shortBreakInput.value);
-  const longBreakValue = parseInt(longBreakInput.value);
+function checkInputsSettings() {
+  const pomodoroValue = parseFloat(pomodoroInput.value);
+  const shortBreakValue = parseFloat(shortBreakInput.value);
+  const longBreakValue = parseFloat(longBreakInput.value);
   const intervalValue = parseInt(intervalInput.value);
 
   const hasEmptyInput =
@@ -231,7 +228,6 @@ function checkInputs() {
 }
 
 function updatePomodoroLocalStorage() {
-  setTimeDisplay(pomodoroDuration.toString().padStart(2, "0"), "00");
   timeRemaining = pomodoroDuration;
   pomodoroCount = 0;
   setActiveTimer("pomodoro");
@@ -242,22 +238,22 @@ function updatePomodoroLocalStorage() {
   intervalInput.value = intervalPomodoroCount;
 }
 
-pomodoroInput.addEventListener("input", checkInputs);
-shortBreakInput.addEventListener("input", checkInputs);
-longBreakInput.addEventListener("input", checkInputs);
-intervalInput.addEventListener("input", checkInputs);
+pomodoroInput.addEventListener("input", checkInputsSettings);
+shortBreakInput.addEventListener("input", checkInputsSettings);
+longBreakInput.addEventListener("input", checkInputsSettings);
+intervalInput.addEventListener("input", checkInputsSettings);
 
 okButton.addEventListener("click", function () {
-  if (!isNaN(parseInt(pomodoroInput.value))) {
-    pomodoroDuration = parseInt(pomodoroInput.value);
+  if (!isNaN(parseFloat(pomodoroInput.value))) {
+    pomodoroDuration = parseFloat(pomodoroInput.value);
     localStorage.setItem("pomodoroDuration", pomodoroDuration.toString());
   }
-  if (!isNaN(parseInt(shortBreakInput.value))) {
-    shortBreakDuration = parseInt(shortBreakInput.value);
+  if (!isNaN(parseFloat(shortBreakInput.value))) {
+    shortBreakDuration = parseFloat(shortBreakInput.value);
     localStorage.setItem("shortBreakDuration", shortBreakDuration.toString());
   }
-  if (!isNaN(parseInt(longBreakInput.value))) {
-    longBreakDuration = parseInt(longBreakInput.value);
+  if (!isNaN(parseFloat(longBreakInput.value))) {
+    longBreakDuration = parseFloat(longBreakInput.value);
     localStorage.setItem("longBreakDuration", longBreakDuration.toString());
   }
   if (!isNaN(parseInt(intervalInput.value))) {
@@ -429,7 +425,7 @@ function addTask(id, text, completed, completedPomodoros, selectedPomodors) {
         <button id="editTask_${id}" class="todo__edit">Редактировать</button>
         <span id="removeTask_${id}" class="close hidden">&times;</span>
       </div>
-      <div class="todo__item-noneContainer hidden">
+      <div class="todo__item-updateContainer hidden">
         <div>
           <span id="completedPomodoros_${id}" class="todo__completed-pomodoros">${completedPomodoros}/</span>
           <input id="selectedPomodors_${id}" type="number" class="todo__selected-pomodors" value="${selectedPomodors}">
@@ -449,40 +445,59 @@ function addTask(id, text, completed, completedPomodoros, selectedPomodors) {
   const saveBtnTask = document.getElementById(`saveTask_${id}`);
   const removeBtnTask = document.getElementById(`removeTask_${id}`);
   const taskInput = document.getElementById(`task_${id}`);
-  const itemNoneContainer = document.querySelector(`[id="${id}"] .todo__item-noneContainer`);
+  const itemUpdateContainer = document.querySelector(`[id="${id}"] .todo__item-updateContainer`);
 
   checkbox.addEventListener("change", function () {
     toggleTaskCompletion(id);
   });
 
   editBtnTask.addEventListener("click", function () {
+    const allItems = todoList.querySelectorAll("li");
+
+    allItems.forEach((item) => {
+      item.classList.remove("active");
+      localStorage.removeItem("activeTask");
+    });
+
     editBtnTask.classList.add("hidden");
     removeBtnTask.classList.remove("hidden");
     taskInput.removeAttribute("readonly");
-    itemNoneContainer.classList.remove("hidden");
-    itemNoneContainer.style.marginTop = "30px";
+    taskInput.classList.remove("todo__input-read");
+    itemUpdateContainer.classList.remove("hidden");
+    itemUpdateContainer.style.marginTop = "30px";
+
+    const pomodoroCounterSpan = document.getElementById(`pomodoroCounter_${id}`);
+    const completedPomodorosSpan = document.getElementById(`completedPomodoros_${id}`);
+    const completedPomodoros = parseInt(pomodoroCounterSpan.textContent.split("/")[0]);
+    
+    completedPomodorosSpan.textContent = `${completedPomodoros} /`;
   });
 
   saveBtnTask.addEventListener("click", function () {
     const selectedPomodorsInput = document.getElementById(`selectedPomodors_${id}`);
     const selectedPomodors = parseInt(selectedPomodorsInput.value);
-    const completedPomodorosSpan = document.getElementById(`completedPomodoros_${id}`);
-    completedPomodorosSpan.textContent = `${completedPomodoros}/${selectedPomodors}`;
+    const pomodoroCounterSpan = document.getElementById(`pomodoroCounter_${id}`);
+    
+    completedPomodoros = parseInt(pomodoroCounterSpan.textContent.split("/")[0]);
+    
+    pomodoroCounterSpan.textContent = `${completedPomodoros}/${selectedPomodors}`;
     
     updateTasksLocalStorage();
-
-    itemNoneContainer.classList.add("hidden");
+  
+    taskInput.classList.add("todo__input-read");
+    itemUpdateContainer.classList.add("hidden");
     removeBtnTask.classList.add("hidden");
     editBtnTask.classList.remove("hidden");
   });
 
   cancelBtnTask.addEventListener("click", function () {
+    taskInput.classList.add("todo__input-read");
     editBtnTask.classList.remove("hidden");
     removeBtnTask.classList.add("hidden");
 
     taskInput.setAttribute("readonly", true);
 
-    itemNoneContainer.classList.add("hidden");
+    itemUpdateContainer.classList.add("hidden");
   });
 
   saveTasksToLocalStorage();
@@ -502,22 +517,29 @@ todoList.addEventListener("click", function (event) {
   }
 
   const target = event.target.closest("li");
+  const editBtnTask = event.target.closest(".todo__edit");
+  const saveBtnTask = event.target.closest(".todo__save");
+  const cancelBtnTask = event.target.closest(".todo__cancel");
+  const checkboxTask = event.target.classList.contains("todo__checkbox");
 
-  if (target && !event.target.classList.contains("todo__checkbox")) {
+  if (target && !checkboxTask && !editBtnTask && !saveBtnTask && !cancelBtnTask) {
     const isActive = target.classList.contains("active");
+    const itemUpdateContainer = target.querySelector(".todo__item-updateContainer");
 
-    if (isActive) {
-      target.classList.remove("active");
-      localStorage.removeItem("activeTask");
-    } else {
-      const allItems = todoList.querySelectorAll("li");
+    if (!itemUpdateContainer || itemUpdateContainer.classList.contains("hidden")) {
+      if (isActive) {
+        target.classList.remove("active");
+        localStorage.removeItem("activeTask");
+      } else {
+        const allItems = todoList.querySelectorAll("li");
 
-      allItems.forEach((item) => {
-        item.classList.remove("active");
-      });
+        allItems.forEach((item) => {
+          item.classList.remove("active");
+        });
 
-      target.classList.add("active");
-      saveActiveTaskToLocalStorage(target.id);
+        target.classList.add("active");
+        saveActiveTaskToLocalStorage(target.id);
+      }
     }
   }
 });

@@ -378,7 +378,7 @@ button:hover {
   justify-content: space-between;
 }
 
-.todo__item-noneContainer {
+.todo__item-updateContainer {
   display: flex;
   align-items: center;
   justify-content: space-between;
