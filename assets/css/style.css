@@ -1,16 +1,16 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&family=Open+Sans:wght@300;400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@400;500;700;800&display=swap");
 
 * {
   box-sizing: border-box;
 }
 
 body {
-  font-family: "Montserrat", sans-serif;
+  font-family: "Roboto Flex", sans-serif;
   font-weight: 400;
   font-size: 18px;
   line-height: 24px;
-  color: #000;
-  background-color: #5cdb95;
+  color: #fff2f2;
+  background-color: #0d0404;
 }
 
 button {
@@ -18,14 +18,14 @@ button {
   font-weight: 400;
   border: none;
   border-radius: 6px;
-  background: none rgba(5, 56, 107, 0.7);
-  color: #fff;
+  background: rgba(76, 172, 255, 0.62);
+  color: #f2f9ff;
   padding: 10px 17px;
   cursor: pointer;
   transition: all 0.2s;
 }
 button:hover {
-  opacity: 0.5;
+  opacity: 0.6;
 }
 
 .container {
@@ -66,8 +66,7 @@ button:hover {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  background-color: rgba(255, 255, 255, 0.3);
-  padding: 20px 0px 30px;
+  background-color: transparent;
   border-radius: 6px;
   width: 100%;
   padding: 20px 50px 30px 50px;
@@ -81,16 +80,19 @@ button:hover {
 
 .timer__btn {
   padding: 8px;
-  background: none rgb(64, 93, 122);
+  background: rgba(76, 172, 255, 0.15);
+  border: 2px solid #f2f9ff;
+  border-radius: 9999px;
+  color: #f2fff5;
 }
 
 /*  */
 
 .timer__display {
-  font-weight: 700;
+  font-weight: 800;
   display: flex;
   margin-bottom: 50px;
-  font-size: 70px;
+  font-size: 80px;
 }
 
 .timer__title {
@@ -107,14 +109,20 @@ button:hover {
 }
 
 .timer__btn-start {
+  background: rgba(77, 218, 110, 0.62);
+  border-radius: 12px;
 }
 
 .timer__btn-pause {
   display: none;
+  background: rgba(76, 172, 255, 0.15);
+  border-radius: 12px;
 }
 
 .timer__btn-reset {
   display: none;
+  background: rgba(255, 76, 76, 0.15);
+  border-radius: 12px;
 }
 
 /*  */
@@ -147,16 +155,19 @@ button:hover {
 
 .modal__content {
   position: relative;
-  background-color: #fefefe;
+  background-color: #0d0404;
   margin: auto;
   padding: 0;
   border: 1px solid #888;
   width: 100%;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.039),
+    0px 5.5px 16px rgba(0, 0, 0, 0.19);
+  border-radius: 24px;
   -webkit-animation-name: animatetop;
   -webkit-animation-duration: 0.4s;
   animation-name: animatetop;
   animation-duration: 0.4s;
+  color: #fff2f2;
 }
 
 /* Add Animation */
@@ -183,7 +194,7 @@ button:hover {
 }
 
 .close {
-  color: #000;
+  color: #f2fff5;
   float: right;
   font-size: 28px;
   font-weight: bold;
@@ -198,11 +209,9 @@ button:hover {
 
 .modal__header {
   font-size: 28px;
-  background-color: #fff;
   padding: 16px;
   margin-bottom: 5px;
-  color: #000;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .modal__body {
@@ -217,12 +226,11 @@ button:hover {
 }
 
 .modal__reset {
-  background-color: #5c97db;
 }
 
 .modal__successfully {
   margin-left: 10px;
-  background-color: #4fbe38;
+  background-color: rgba(77, 218, 110, 0.62);
 }
 
 .modal__successfully.disabled {
@@ -283,7 +291,12 @@ button:hover {
 .modal__input {
   padding: 8px;
   width: 98px;
-  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  background-color: #0d0404;
+  color: #fff2f2;
+  font-weight: 400;
+  font-size: 16px;
 }
 
 .modal__string {
@@ -315,8 +328,9 @@ button:hover {
   margin-bottom: 20px;
   display: flex;
   flex-direction: column;
+  border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 8px;
-  background-color: #fff;
+  background-color: #0d0404;
   padding: 10px 15px;
 }
 
@@ -328,11 +342,24 @@ button:hover {
 
 .todo__input {
   width: 100%;
-  padding: 10px;
+  padding: 5px;
   margin-bottom: 10px;
   border: none;
-  border-bottom: 1px solid #000;
+  border-bottom: 1px solid #fff;
   outline: none;
+  background-color: #0d0404;
+  color: #f2f9ff;
+  font-size: 18px;
+}
+
+.todo__input-read {
+  padding: 0;
+  margin-bottom: 0;
+  border: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
 }
 
 .todo__input-num {
@@ -359,7 +386,8 @@ button:hover {
   display: flex;
   flex-direction: column;
   border-radius: 8px;
-  background-color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background-color: #0d0404;
   padding: 10px 15px;
   margin-bottom: 10px;
   cursor: pointer;
@@ -390,19 +418,22 @@ button:hover {
   flex-grow: 1;
 }
 
-.todo__input-read {
-  padding-bottom: 0;
-  border: none;
-  margin-left: 10px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  cursor: pointer;
+.todo__selected-pomodors {
+  padding: 8px;
+  width: 98px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  background-color: #0d0404;
+  color: #fff2f2;
+  font-weight: 400;
+  font-size: 16px;
 }
 
 .todo__checkbox {
   cursor: pointer;
   transition: all 0.2s;
+  margin-right: 15px;
+  transform: scale(1.5);
 }
 .todo__checkbox:hover {
   opacity: 0.5;
@@ -410,10 +441,15 @@ button:hover {
 
 .todo__counter {
   margin-right: 8px;
+  margin-left: 15px;
+}
+
+.todo__save {
+  background-color: rgba(77, 218, 110, 0.62);
 }
 
 .completed {
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
 .hidden {
