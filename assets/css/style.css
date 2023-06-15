@@ -28,6 +28,10 @@ button:hover {
   opacity: 0.6;
 }
 
+.main {
+  margin-bottom: 60px;
+}
+
 .container {
   max-width: 620px;
   padding: 0 40px;
@@ -150,7 +154,7 @@ button:hover {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.8);
 }
 
 .modal__content {
@@ -397,7 +401,7 @@ button:hover {
 }
 
 .todo__item.active {
-  border-left: 5px solid #000;
+  border-left: 5px solid #f2f9ff;
 }
 
 .todo__item-mainContainer {
@@ -437,6 +441,15 @@ button:hover {
 }
 .todo__checkbox:hover {
   opacity: 0.5;
+}
+
+.todo__edit {
+  background-color: transparent;
+  padding: 0;
+}
+
+.todo__edit-img {
+  width: 30px;
 }
 
 .todo__counter {

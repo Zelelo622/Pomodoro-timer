@@ -501,7 +501,7 @@ function addTask(id, text, completed, completedPomodoros, selectedPomodors) {
           <input id="task_${id}" type="text" class="todo__input-read todo__input" value="${text}" readonly>
           <span id="pomodoroCounter_${id}" class="todo__counter" data-selected-pomodors="${selectedPomodors}">${completedPomodoros}/${selectedPomodors}</span>
         </div>
-        <button id="editTask_${id}" class="todo__edit">Редактировать</button>
+        <button id="editTask_${id}" class="todo__edit"><img class="todo__edit-img" src="../assets/img/setting.svg" alt="Редактировать"></button>
         <span id="removeTask_${id}" class="close hidden">&times;</span>
       </div>
       <div class="todo__item-updateContainer hidden">

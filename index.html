@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pomodoro Timer</title>
     <link rel="stylesheet" href="./assets/css/reset.css" />
     <link rel="stylesheet" href="./assets/css/style.css" />
+    <link rel="stylesheet" href="./assets/css/media.css" />
   </head>
   <body>
     <header class="header">
@@ -61,142 +65,147 @@
           </div>
         </div>
       </section>
+
+      <section>
+        <div id="modalDescription" class="modal">
+          <div class="modal__container">
+            <div class="modal__content">
+              <div class="modal__header">
+                <span id="closeDescription" class="close">&times;</span>
+                <h2>Описание</h2>
+              </div>
+              <div class="modal__body">
+                <p class="modal__parag">Возможности:</p>
+                <ul class="modal__list">
+                  <li class="modal__item">
+                    Возможность переключаться между тайменами
+                  </li>
+                  <li class="modal__item">
+                    Возможность приостанавливать и сбрасывать таймер
+                  </li>
+                  <li class="modal__item">
+                    Возможность настройки времени для всех таймеров
+                  </li>
+                  <li class="modal__item">
+                    Возможность настройки интервала длинного перерыва
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div id="modalSettings" class="modal">
+          <div class="modal__container">
+            <div class="modal__content">
+              <div class="modal__header">
+                <h2>Настройки</h2>
+              </div>
+              <div class="modal__body">
+                <div class="modal__title">TIMER</div>
+                <div class="modal__timer">
+                  <div class="modal__subtitle"><span>Время (минуты)</span></div>
+                  <div class="modal__inputs">
+                    <div class="modal__block-input">
+                      <label for="pomodoroInput" class="modal__label"
+                        >Pomodoro</label
+                      >
+                      <input
+                        id="pomodoroInput"
+                        type="number"
+                        min="1"
+                        class="modal__input"
+                        value="25"
+                      />
+                    </div>
+                    <div class="modal__block-input">
+                      <label for="shortBreakInput" class="modal__label"
+                        >Short break</label
+                      >
+                      <input
+                        id="shortBreakInput"
+                        type="number"
+                        min="1"
+                        class="modal__input"
+                        value="5"
+                      />
+                    </div>
+                    <div class="modal__block-input">
+                      <label for="longBreakInput" class="modal__label"
+                        >Long break</label
+                      >
+                      <input
+                        id="longBreakInput"
+                        type="number"
+                        min="1"
+                        class="modal__input"
+                        value="15"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="modal__timer">
+                  <div class="modal__string">
+                    <div class="modal__subtitle-mb0 modal__subtitle">
+                      <span>Интервал длинного перерыва</span>
+                    </div>
+                    <div>
+                      <input
+                        id="intervalInput"
+                        type="number"
+                        min="1"
+                        class="modal__input"
+                        value="4"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal__footer">
+                <button id="resetOriginalButton" class="modal__reset">
+                  Сбросить настройки
+                </button>
+                <button id="okButton" class="modal__successfully">ОК</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="todo">
+          <div class="container">
+            <div class="todo__inner">
+              <h2 class="todo__title">Список дел</h2>
+              <div class="todo__input-container">
+                <input
+                  type="text"
+                  id="taskInput"
+                  class="todo__input"
+                  placeholder="Введите задачу..."
+                />
+                <div class="todo__pomodoro-container">
+                  <input
+                    id="pomodoroCountTask"
+                    type="number"
+                    class="todo__input-num todo__input"
+                    value="1"
+                    min="1"
+                  />
+                  <button id="addTaskButton" class="todo__button">
+                    Добавить
+                  </button>
+                </div>
+              </div>
+              <ul id="todoList" class="todo__list"></ul>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
 
-    <!-- Modal content for description -->
-    <div id="modalDescription" class="modal">
-      <div class="modal__container">
-        <div class="modal__content">
-          <div class="modal__header">
-            <span id="closeDescription" class="close">&times;</span>
-            <h2>Описание</h2>
-          </div>
-          <div class="modal__body">
-            <p class="modal__parag">Возможности:</p>
-            <ul class="modal__list">
-              <li class="modal__item">
-                Возможность переключаться между тайменами
-              </li>
-              <li class="modal__item">
-                Возможность приостанавливать и сбрасывать таймер
-              </li>
-              <li class="modal__item">
-                Возможность настройки времени для всех таймеров
-              </li>
-              <li class="modal__item">
-                Возможность настройки интервала длинного перерыва
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Modal content for settings -->
-    <div id="modalSettings" class="modal">
-      <div class="modal__container">
-        <div class="modal__content">
-          <div class="modal__header">
-            <h2>Настройки</h2>
-          </div>
-          <div class="modal__body">
-            <div class="modal__title">TIMER</div>
-            <div class="modal__timer">
-              <div class="modal__subtitle"><span>Время (минуты)</span></div>
-              <div class="modal__inputs">
-                <div class="modal__block-input">
-                  <label for="pomodoroInput" class="modal__label"
-                    >Pomodoro</label
-                  >
-                  <input
-                    id="pomodoroInput"
-                    type="number"
-                    min="1"
-                    class="modal__input"
-                    value="25"
-                  />
-                </div>
-                <div class="modal__block-input">
-                  <label for="shortBreakInput" class="modal__label"
-                    >Short break</label
-                  >
-                  <input
-                    id="shortBreakInput"
-                    type="number"
-                    min="1"
-                    class="modal__input"
-                    value="5"
-                  />
-                </div>
-                <div class="modal__block-input">
-                  <label for="longBreakInput" class="modal__label"
-                    >Long break</label
-                  >
-                  <input
-                    id="longBreakInput"
-                    type="number"
-                    min="1"
-                    class="modal__input"
-                    value="15"
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="modal__timer">
-              <div class="modal__string">
-                <div class="modal__subtitle-mb0 modal__subtitle">
-                  <span>Интервал длинного перерыва</span>
-                </div>
-                <div>
-                  <input
-                    id="intervalInput"
-                    type="number"
-                    min="1"
-                    class="modal__input"
-                    value="4"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="modal__footer">
-            <button id="resetOriginalButton" class="modal__reset">
-              Сбросить настройки
-            </button>
-            <button id="okButton" class="modal__successfully">ОК</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ToDo list -->
-    <div class="todo">
-      <div class="container">
-        <div class="todo__inner">
-          <h2 class="todo__title">Список дел</h2>
-          <div class="todo__input-container">
-            <input
-              type="text"
-              id="taskInput"
-              class="todo__input"
-              placeholder="Введите задачу..."
-            />
-            <div class="todo__pomodoro-container">
-              <input
-                id="pomodoroCountTask"
-                type="number"
-                class="todo__input-num todo__input"
-                value="1"
-                min="1"
-              />
-              <button id="addTaskButton" class="todo__button">Добавить</button>
-            </div>
-          </div>
-          <ul id="todoList" class="todo__list"></ul>
-        </div>
-      </div>
-    </div>
-
-    <script type="module" src="./js/script.js"></script>
+    <script src="./js/script.js"></script>
   </body>
 </html>

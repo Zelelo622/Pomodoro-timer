@@ -1,0 +1,56 @@
+@media (max-width: 500px) {
+  button {
+    white-space: nowrap;
+  }
+
+  .container {
+    padding: 0 5px;
+  }
+
+  .timer__list {
+    gap: 10px;
+  }
+}
+
+@media (max-width: 420px) {
+  .modal__inputs {
+    flex-direction: column;
+  }
+
+  .modal__block-input {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: end;
+    margin-bottom: 10px;
+  }
+
+  .modal__input {
+    width: 55px;
+  }
+
+  .todo__checkbox {
+    transform: scale(1.2);
+  }
+
+  .todo__edit-img {
+    width: 25px;
+  }
+
+  .todo__save {
+    padding: 5px 12px;
+  }
+
+  .todo__cancel {
+    padding: 5px 12px;
+  }
+}
+
+@media (max-width: 380px) {
+  .modal {
+    padding-top: 40px;
+  }
+
+  .modal__container {
+    padding: 0 10px;
+  }
+}
