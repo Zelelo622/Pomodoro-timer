@@ -237,11 +237,7 @@ button:hover {
   background-color: rgba(77, 218, 110, 0.62);
 }
 
-.modal__successfully.disabled {
-  pointer-events: none;
-  opacity: 0.5;
-  cursor: default;
-}
+.modal__successfully {}
 
 .modal__parag {
   font-weight: 500;
@@ -377,11 +373,7 @@ button:hover {
   background-color: #4fbe38;
 }
 
-.todo__button.disabled {
-  pointer-events: none;
-  opacity: 0.5;
-  cursor: default;
-}
+.todo__button{}
 
 .todo__list {
 }
@@ -467,4 +459,10 @@ button:hover {
 
 .hidden {
   display: none;
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+  cursor: default;
 }

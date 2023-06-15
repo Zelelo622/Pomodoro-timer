@@ -303,7 +303,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  checkTaskInputs();
+  checkAddTaskInputs();
 });
 
 function saveTasksToLocalStorage() {
@@ -342,7 +342,7 @@ function getActiveTaskFromLocalStorage() {
   return localStorage.getItem("activeTask");
 }
 
-function checkTaskInputs() {
+function checkAddTaskInputs() {
   const pomodoroCountTaskValue = parseInt(pomodoroCountTask.value);
 
   const hasEmptyInput = isNaN(pomodoroCountTaskValue);
@@ -359,8 +359,26 @@ function checkTaskInputs() {
   }
 }
 
-pomodoroCountTask.addEventListener("input", checkTaskInputs);
-taskInput.addEventListener("input", checkTaskInputs);
+function checkEditTaskInputs(id) {
+  const selectedPomodorsInput = document.getElementById(`selectedPomodors_${id}`);
+  const saveTaskButton = document.getElementById(`saveTask_${id}`);
+  const taskInput = document.querySelector(`#task_${id}`);
+
+  const selectedPomodorsValue = parseInt(selectedPomodorsInput.value);
+  const isPomodorsEmpty = isNaN(selectedPomodorsValue) || selectedPomodorsValue <= 0;
+  const isTextEmpty = taskInput.value.trim() === "";
+
+  saveTaskButton.disabled = isPomodorsEmpty || isTextEmpty;
+
+  if (saveTaskButton.disabled) {
+    saveTaskButton.classList.add("disabled");
+  } else {
+    saveTaskButton.classList.remove("disabled");
+  }
+}
+
+pomodoroCountTask.addEventListener("input", checkAddTaskInputs);
+taskInput.addEventListener("input", checkAddTaskInputs);
 
 taskInput.addEventListener("keypress", function (event) {
   if (event.key === "Enter" && !addTaskButton.disabled) {
@@ -435,6 +453,14 @@ function handleEditBtnClick(id) {
   completedPomodorosSpan.textContent = `${completedPomodoros} /`;
 
   previousInputSelectedPomodoros = selectedPomodors;
+
+  selectedPomodorsInput.addEventListener("input", function () {
+    checkEditTaskInputs(id);
+  });
+
+  taskInput.addEventListener("input", function () {
+    checkEditTaskInputs(id);
+  });
 }
 
 function handleSaveBtnClick(id) {
@@ -457,6 +483,14 @@ function handleSaveBtnClick(id) {
   itemUpdateContainer.classList.add("hidden");
   removeBtnTask.classList.add("hidden");
   editBtnTask.classList.remove("hidden");
+  
+  selectedPomodorsInput.addEventListener("input", function () {
+    checkEditTaskInputs(id);
+  });
+
+  taskInput.addEventListener("input", function () {
+    checkEditTaskInputs(id);
+  });
 }
 
 function handleCancelBtnClick(id) {
@@ -507,7 +541,7 @@ function addTask(id, text, completed, completedPomodoros, selectedPomodors) {
       <div class="todo__item-updateContainer hidden">
         <div>
           <span id="completedPomodoros_${id}" class="todo__completed-pomodoros">${completedPomodoros}/</span>
-          <input id="selectedPomodors_${id}" type="number" class="todo__selected-pomodors" value="${selectedPomodors}">
+          <input id="selectedPomodors_${id}" type="number" class="todo__selected-pomodors" min="0" value="${selectedPomodors}">
         </div>
         <div>
           <button id="saveTask_${id}" class="todo__save">Сохранить</button>
@@ -522,6 +556,9 @@ function addTask(id, text, completed, completedPomodoros, selectedPomodors) {
   const editBtnTask = document.getElementById(`editTask_${id}`);
   const cancelBtnTask = document.getElementById(`cancelTask_${id}`);
   const saveBtnTask = document.getElementById(`saveTask_${id}`);
+  const selectedPomodorsInput = document.getElementById(`selectedPomodors_${id}`);
+
+  checkAddTaskInputs();
 
   checkbox.addEventListener("change", function () {
     toggleTaskCompletion(id);
