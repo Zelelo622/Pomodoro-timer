@@ -272,6 +272,7 @@ resetOriginalButton.addEventListener("click", function () {
   shortBreakInput.value = 5;
   longBreakInput.value = 15;
   intervalInput.value = 4;
+  checkInputsSettings();
 });
 
 // ToDo List
